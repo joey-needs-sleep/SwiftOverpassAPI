@@ -48,6 +48,9 @@ public class OPClient {
 	
 	// Store the current query
 	private var query: String? = nil
+    
+    // Set a custom user agent. Recommended to do this to follow the public instance ToS
+    public var userAgent: String? = nil
 	
 	// The selected endpoint for the overpass api post request
 	public var endpoint: Endpoint
@@ -110,6 +113,10 @@ public class OPClient {
 		var request = URLRequest(url: url)
 		request.httpMethod = "POST"
 		request.httpBody = data
+        
+        if let userAgent = userAgent {
+            request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+        }
 		
 		// Sending the URL request
 		task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
