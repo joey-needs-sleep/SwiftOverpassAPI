@@ -12,7 +12,7 @@ import Foundation
 public enum OPRequestError: LocalizedError {
 	case badResponse(HTTPURLResponse)
 	case nilData
-	case decodingFailed
+    case decodingFailed(data: String?, decodingError: Error)
 	case queryCancelled
 	
 	public var errorDescription: String? {

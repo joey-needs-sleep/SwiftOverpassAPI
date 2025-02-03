@@ -49,13 +49,19 @@ class OPDecodingOperation: Operation {
 	}
 	
 	
-	private func decodeElements(from data: Data) throws {
-		
-		// JSON decoder for decoding response
-		let jsonDecoder = JSONDecoder()
-		
-		// In order to create containers for decoding our data outside of the init(from: Decoder) function, we have to do something a little hackey and create a struct with the sole purpose of initializing a decoder that holds our JSON data.
-		let decoderExtractor = try jsonDecoder.decode(DecoderExtractor.self, from: data)
+    private func decodeElements(from data: Data) throws {
+        
+        // JSON decoder for decoding response
+        let jsonDecoder = JSONDecoder()
+        
+        // In order to create containers for decoding our data outside of the init(from: Decoder) function, we have to do something a little hackey and create a struct with the sole purpose of initializing a decoder that holds our JSON data.
+        let decoderExtractor:DecoderExtractor
+        do {
+            decoderExtractor = try jsonDecoder.decode(DecoderExtractor.self, from: data)
+        } catch {
+            let dataAsString = String(data: data, encoding: .utf8)
+            throw OPRequestError.decodingFailed(data: dataAsString, decodingError: error)
+        }
 		let decoder = decoderExtractor.decoder
 		
 		// Container for the entire JSON response
