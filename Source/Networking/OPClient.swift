@@ -147,7 +147,12 @@ public class OPClient {
 				let httpResponse = response as? HTTPURLResponse,
 				httpResponse.statusCode != 200
 			{
-				completionOnMain(.failure(OPRequestError.badResponse(httpResponse)))
+                var decodedData: String? = nil
+                
+                if let data {
+                    decodedData = String(data: data, encoding: .utf8)
+                }
+                completionOnMain(.failure(OPRequestError.badResponse(httpResponse, decodedBody: decodedData)))
 				return
 			}
 			

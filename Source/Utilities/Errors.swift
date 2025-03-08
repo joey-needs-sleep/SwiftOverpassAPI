@@ -10,15 +10,15 @@ import Foundation
 
 // Errors that can result from Overpass requests
 public enum OPRequestError: LocalizedError {
-	case badResponse(HTTPURLResponse)
+    case badResponse(HTTPURLResponse, decodedBody: String?)
 	case nilData
     case decodingFailed(data: String?, decodingError: Error)
 	case queryCancelled
 	
 	public var errorDescription: String? {
 		switch self {
-		case .badResponse(let response):
-			return "Bad HTTP response: \(response)"
+		case .badResponse(let response, let body):
+			return "Bad HTTP response: \(response) | Body: \(body ?? "no body")"
 		case .nilData:
 			return "Query response returned nil data"
 		case .decodingFailed:
